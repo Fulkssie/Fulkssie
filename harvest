@@ -1,0 +1,99 @@
+Slot_Count = 16
+
+function getItemIndex(itemName)
+    for slot = 1, Slot_Count, 1 do
+        local item = turtle.getItemDetail(slot)
+        if(item ~= nil) then
+            if(item["name"] == itemName) then
+                return slot
+            end
+        end
+    end
+end
+ 
+function refuel()
+   coalIndex = getItemIndex("minecraft:coal")
+   turtle.select(coalIndex)
+   turtle.refuel()
+end
+ 
+function IsGrown()
+    isBlock, data = turtle.inspect()
+ 
+    if(isBlock)
+    then
+        if (data['state']['age'] == 7)
+        then
+            return true
+        end
+    end
+    return false
+end
+ 
+function harvest()
+    isBlock, data = turtle.inspect()
+ 
+    if(isBlock)
+    then
+        if (data['state']['age'] == 7)
+        then
+            turtle.dig()
+            succ()
+            potatoIndex = getItemIndex("minecraft:potato")
+            turtle.select(potatoIndex)
+            turtle.place()
+            turtle.dropDown(turtle.getItemCount(potatoIndex) - 1)
+        end
+    else
+        potatoIndex = getItemIndex("minecraft:potato")
+        turtle.place()
+    end
+end
+ 
+function waitForGrowth()
+    while(not IsGrown()) do
+        sleep(5)
+    end
+end
+ 
+function checkLeft()
+    turtle.turnLeft()
+    if (turtle.detect())
+    then
+        return true
+    end
+    turtle.forward()
+    turtle.turnRight()
+    return false
+end
+ 
+ 
+function succ()
+    for i = 1, 6, 1
+    do
+        turtle.suck()
+    end
+end
+ 
+local Back = false
+ 
+while(1)
+do
+ 
+    if turtle.getFuelLevel() < 50 then
+        refuel()
+    end
+
+    harvest()
+ 
+    if (checkLeft())
+    then
+       turtle.turnLeft()
+       if (Back) then
+            waitForGrowth()
+       end
+       Back = not Back
+    end
+end
+ 
+waitForGrowth()
