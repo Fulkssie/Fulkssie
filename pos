@@ -1,0 +1,50 @@
+
+SLOT_COUNT = 16
+
+rednet.open('bottom')
+ 
+prices = {
+    ['minecraft:coal'] = 2,
+    ['minecraft:iron_ingot'] = 4,
+    ['minecraft:gold_ingot'] = 6,
+    ['minecraft:diamond'] = 32,
+    ['minecraft:netherite_scrap'] = 160
+}
+ 
+function getFirstItemIndex()
+    for i = 1, SLOT_COUNT, 1 do
+        turtle.select(i)
+        if turtle.getItemDetail() ~= nil then
+            return i
+        end
+    end
+
+    return nil
+end
+ 
+function calculatePayout(item)
+ 
+    local price = prices[item['name']]
+    if price ~= nil then
+        return price * item['count']
+    end
+    return false
+end
+
+while true do
+    if turtle.suckUp(12) then
+        idx = getFirstItemIndex()
+        item = turtle.getItemDetail(idx)
+        turtle.select(idx)
+
+        if (prices[item['name']] ~= nil) then
+            local payout = calculatePayout(item)
+
+            turtle.drop()
+            rednet.broadcast(payout)
+        else
+            print('Invalid Payment')
+            turtle.dropUp()
+        end
+    end
+end
