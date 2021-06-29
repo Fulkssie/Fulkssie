@@ -1,0 +1,31 @@
+local Slot_Count = 16
+rednet.open('right')
+
+function dropAllItems(direction)
+    for i = 1, Slot_Count, 1 do
+        turtle.select(i)
+        if(direction == 'forward') then
+        turtle.drop()
+        elseif(direction == 'up') then
+        turtle.dropUp()
+        elseif(direction == 'down') then
+        turtle.drupDown()
+        elseif(direction == nil) then
+        turtle.drop()
+        end
+    end
+end
+
+while(true) do
+    id, msg = rednet.receive()
+    potatoCount = tonumber(msg)
+
+    print('dispensing ' .. potatoCount .. ' potatoes')
+
+    for i = 1, math.floor(potatoCount / 64) do
+        turtle.suckUp()
+    end
+
+    turtle.suckUp(potatoCount % 64)
+    dropAllItems('forward')
+end
