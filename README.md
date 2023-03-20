@@ -1,5 +1,1 @@
-- 👋 Hi, I’m @Fulkssie
-- 👀 I’m interested in coding and valorant
-- 🌱 I’m currently learning idk whatever i want
-- 💞️ I’m looking to collaborate on: please be my gf
-- 📫 How to reach me Discord: Fulkssie #8423
+Smashy bro
